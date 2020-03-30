@@ -26,3 +26,7 @@ jobs:
     - name: Byte compile
       run: |
         emacs -Q --batch -L . --eval "(setq byte-compile-error-on-warn t)" -f batch-byte-compile another-emacs-server.el
+    - name: Try the server
+      run: |
+        emacs --daemon -L . -l another-emacs-server -f another-emacs-server
+        curl -s -d '{"eval": "emacs-version"}' -H "Content-Type: application/json" localhost:7777
