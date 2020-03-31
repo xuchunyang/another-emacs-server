@@ -26,12 +26,10 @@ jobs:
     - name: Byte compile
       run: |
         emacs -Q --batch -L . --eval "(setq byte-compile-error-on-warn t)" -f batch-byte-compile another-emacs-server.el
-    # XXX Pending upstream fixing the error
-    # *ERROR*: Symbol’s function definition is void: \(setf\ process\)
-    # - name: Try the server
-    #   run: |
-    #     emacs -Q --daemon
-    #     emacsclient --eval "(push \"$PWD\" load-path)"
-    #     emacsclient --eval "(require 'another-emacs-server)"
-    #     emacsclient --eval '(another-emacs-server)'
-    #     curl -s -d '{"eval": "emacs-version"}' -H "Content-Type: application/json" localhost:7777
+    - name: Try the server
+      run: |
+        emacs -Q --daemon
+        emacsclient --eval "(push \"$PWD\" load-path)"
+        emacsclient --eval "(require 'another-emacs-server)"
+        emacsclient --eval '(another-emacs-server)'
+        curl --retry 3 -s -d '{"eval": "emacs-version"}' -H "Content-Type: application/json" localhost:7777
